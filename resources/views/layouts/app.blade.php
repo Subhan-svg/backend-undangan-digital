@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>{{ $settings['site_name'] }}</title>
     
-    {{-- @if(isset($settings['site_favicon']))
+    @if(isset($settings['site_favicon']))
         <link rel="icon" type="image/x-icon" href="{{ asset($settings['site_favicon']) }}">
-    @endif --}}
+    @endif
 
     {{-- CSS --}}
     @stack('css')
-    {{-- Custom CSS --}}
-    @stack('styles')
 </head>
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
-        @include('layouts.partials.sidebar')
+        @if(!Request::is('login') && !Request::is('register') && !Request::is('/'))
+            @include('layouts.partials.sidebar')
+        @endif
 
         <!-- Top Navbar -->
-        @include('layouts.partials.topbar')
+        @if(!Request::is('login') && !Request::is('register') && !Request::is('/'))
+            @include('layouts.partials.topbar')
+        @endif
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="{{ Request::is('login') || Request::is('register') || Request::is('/') ? 'main-content-login' : 'main-content' }}">
             @yield('content')
         </main>
     </div>
 
     {{-- Javascript --}}
     @stack('js')
-    {{-- Custom Script --}}
-    @stack('scripts')
 </body>
 </html> 

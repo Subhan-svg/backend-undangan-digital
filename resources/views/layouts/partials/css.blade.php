@@ -134,6 +134,13 @@
         }
 
         /* Main Content */
+        .main-content-login {
+            flex: 1;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);

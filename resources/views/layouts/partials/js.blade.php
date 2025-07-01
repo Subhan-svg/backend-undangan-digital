@@ -49,7 +49,13 @@
         @endif
 
         @if(Session::has('error'))
-            toastr.error("{{ Session::get('error') }}");
+            @if(is_array(Session::get('error')))
+                @foreach(Session::get('error') as $error)
+                    toastr.error("{{ $error }}");
+                @endforeach
+            @else
+                toastr.error("{{ Session::get('error') }}");
+            @endif
         @endif
 
         // SweetAlert Configurations

@@ -1,0 +1,95 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Setting;
+
+class SettingSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $settings = [
+            'site_name' => 'Hachie Invitation',
+            'site_email' => 'hachieinvitation@gmail.com',
+            'site_description' => 'Hachie Invitation adalah jasa layanan untuk pembuatan undangan digital berbagai macam kategori.',
+            'site_phone' => '08989505373',
+            'site_address' => 'Kp. Pulekan RT 001/002',
+            'site_maps' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4949.484020091946!2d106.69855051148559!3d-6.557479764078281!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69dbd0c3d94367%3A0xdc857db1ec55e97e!2sWarung%20Ibu%20Cicih!5e1!3m2!1sid!2sid!4v1751369484777!5m2!1sid!2sid',
+            'site_logo' => '',
+            'site_favicon' => '',
+            'site_header' => '',
+            'site_background_1' => '',
+            'site_background_2' => '',
+            'site_facebook' => '',
+            'site_twitter' => '',
+            'site_tiktok' => '',
+            'site_instagram' => '',
+            'site_youtube' => '',
+            'site_linkedin' => '',
+            'site_title_1' => '',
+            'site_title_2' => '',
+            'site_title_3' => '',
+            'site_title_4' => '',
+            'site_title_5' => '',
+            'site_title_6' => '',
+            'site_title_7' => '',
+            'site_title_8' => '',
+            'site_title_9' => '',
+            'site_title_10' => '',
+            'site_title_11' => '',
+            'site_title_12' => '',
+            'site_title_13' => '',
+            'site_title_14' => '',
+            'site_title_15' => '',
+            'site_subtitle_1' => '',
+            'site_subtitle_2' => '',
+            'site_subtitle_3' => '',
+            'site_subtitle_4' => '',
+            'site_subtitle_5' => '',
+            'site_subtitle_6' => '',
+            'site_subtitle_7' => '',
+            'site_subtitle_8' => '',
+            'site_subtitle_9' => '',
+            'site_subtitle_10' => '',
+            'site_subtitle_11' => '',
+            'site_subtitle_12' => '',
+            'site_subtitle_13' => '',
+            'site_subtitle_14' => '',
+            'site_subtitle_15' => '',
+            'site_button_text_1' => '',
+            'site_button_text_2' => '',
+            'site_button_text_3' => '',
+            'site_button_text_4' => '',
+            'site_button_text_5' => '',
+            'site_button_text_6' => '',
+            'site_button_text_7' => '',
+            'site_button_text_8' => '',
+            'site_button_text_9' => '',
+            'site_button_text_10' => '',
+            'site_button_text_11' => '',
+            'site_button_text_12' => '',
+            'site_button_text_13' => '',
+            'site_button_text_14' => '',
+            'site_button_text_15' => '',
+            'site_button_link_1' => '',
+            'site_button_link_2' => '',
+            'site_button_link_3' => '',
+            'site_button_link_4' => '',
+            'site_button_link_5' => '',
+            'site_button_link_6' => '',
+            'site_button_link_7' => '',
+            'site_button_link_8' => '',
+            'site_button_link_9' => '',
+            'site_button_link_10' => '',
+            'site_button_link_11' => '',
+            'site_button_link_12' => '',
+            'site_button_link_13' => '',
+            'site_button_link_14' => '',
+            'site_button_link_15' => '',
+        ];
+        foreach ($settings as $key => $value) {
+            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
+    }
+} 
