@@ -6,8 +6,6 @@
 <div class="container">
     <h1 class="mb-4">Dashboard</h1>
     
-    <p>Administrator </p>
-    <p>Administrator Test</p>
-    <p>Administrator Test 4</p>
+    <p>Selamat Datang, {{ Auth::user()->name }} </p>
 </div>
 @endsection 
