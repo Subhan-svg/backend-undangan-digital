@@ -8,6 +8,6 @@
 <div class="container">
     <h1 class="mb-4">Dashboard</h1>
     
-    <p>Admin</p>
+    <p>Administrator </p>
 </div>
 @endsection 
