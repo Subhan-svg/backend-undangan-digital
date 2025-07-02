@@ -42,7 +42,7 @@
 
          <li class="nav-item">
             <a class="nav-link {{ request()->is('service') ? 'active' : '' }}" href="{{ route('service') }}">
-                <i class="fas fa-info-circle"></i> Service
+                <i class="fas fa-tools"></i> Service
             </a>
         </li>
 

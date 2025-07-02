@@ -17,7 +17,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
-                <a href="#" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Kembali </a>
+                <a href="{{ route('service') }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back </a>
             </div>
         </div>
 
