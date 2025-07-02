@@ -29,8 +29,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-folder"></i> Categories
+              <a class="nav-link {{ request()->is('category') ? 'active' : '' }}" href="{{ route('category') }}">
+                <i class="fas fa-folder"></i> Category
             </a>
         </li>
 
