@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('category', [CategoryController::class, 'index'])->name('category');
+    Route::get('category/listData', [CategoryController::class, 'listData'])->name('category.list');
+    Route::get('category/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('category/edit/{slug?}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::post('category/update/{slug?}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('category/destroy/{slug?}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::put('profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
