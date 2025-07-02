@@ -318,7 +318,7 @@
 </div>
 @endsection
 
-@push('scripts')
+@push('js')
 <script>
 function previewImage(input, previewId) {
     const preview = document.getElementById(previewId);
