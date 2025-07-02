@@ -40,6 +40,12 @@
             </a>
         </li>
 
+         <li class="nav-item">
+            <a class="nav-link {{ request()->is('service') ? 'active' : '' }}" href="{{ route('service') }}">
+                <i class="fas fa-info-circle"></i> Service
+            </a>
+        </li>
+
         <!-- Settings -->
         <div class="sidebar-heading">Settings</div>
         <li class="nav-item">
