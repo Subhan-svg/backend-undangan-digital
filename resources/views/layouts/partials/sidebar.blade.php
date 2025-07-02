@@ -29,13 +29,13 @@
         </li>
 
         <li class="nav-item">
-              <a class="nav-link {{ request()->is('category') ? 'active' : '' }}" href="{{ route('category') }}">
+            <a class="nav-link {{ request()->is('category') ? 'active' : '' }}" href="{{ route('category') }}">
                 <i class="fas fa-folder"></i> Category
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="{{ route('about') }}">
                 <i class="fas fa-info-circle"></i> About Us
             </a>
         </li>
