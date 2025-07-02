@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,13 @@ Route::middleware('auth')->group(function () {
     Route::get('service/edit/{slug?}', [ServiceController::class, 'edit'])->name('service.edit');
     Route::post('service/update/{slug?}', [ServiceController::class, 'update'])->name('service.update');
     Route::get('service/delete/{slug?}', [ServiceController::class, 'destroy'])->name('service.destroy');
+
+    Route::get('about', [AboutController::class, 'index'])->name('about');
+    Route::get('about/add', [AboutController::class, 'create'])->name('about.create');
+    Route::post('about/store', [AboutController::class, 'store'])->name('about.store');
+    Route::get('about/edit/{slug?}', [AboutController::class, 'edit'])->name('about.edit');
+    Route::post('about/update/{slug?}', [AboutController::class, 'update'])->name('about.update');
+    Route::get('about/delete/{slug?}', [AboutController::class, 'destroy'])->name('about.delete');
+    Route::get('about/getListData', [AboutController::class, 'listData'])->name('about.list');
+
 });
