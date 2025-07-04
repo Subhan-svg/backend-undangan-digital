@@ -18,6 +18,7 @@ class ServiceResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'slug' => $this->slug,
             'description' => $this->description,
             'image' => $this->image,
             'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
