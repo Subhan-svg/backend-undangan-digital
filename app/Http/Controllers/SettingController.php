@@ -9,6 +9,9 @@ class SettingController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('setting-list')) {
+            abort(403, 'Access Denied');
+        }
         $settings = [
             'site_name' => Setting::get('site_name', config('app.name')),
             'site_email' => Setting::get('site_email', 'admin@example.com'),
@@ -94,6 +97,9 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
+        if (!auth()->user()->can('setting-edit')) {
+            abort(403, 'Access Denied');
+        }
         $request->validate([
             'site_name' => 'required|string|max:255',
             'site_email' => 'required|email',

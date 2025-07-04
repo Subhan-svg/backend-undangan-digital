@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
             // Permission
             'permission-list', 'permission-create', 'permission-edit', 'permission-delete',
             // User
-            'user-list', 'user-edit',
+            'user-list', 'user-create', 'user-edit', 'user-delete',
             // Category
             'category-list', 'category-create', 'category-edit', 'category-delete',
             // Service

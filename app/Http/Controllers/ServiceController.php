@@ -12,6 +12,9 @@ class ServiceController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('service-list')) {
+            abort(403, 'Access Denied');
+        }
         return view('service.index');
     }
 
@@ -28,16 +31,21 @@ class ServiceController extends Controller
             return $image;
         })
         ->addColumn('action', function($row){
-            $btn = '<a href ="'.route('service.edit', $row->slug).'" class="btn btn-primary btn-sm me-2 mb-2">
-                        <i class="fas fa-edit"></i>
-                    </a>';
-            $btn .= '<form id="delete-service-'.$row->id.'" action="'.route('service.destroy', $row->slug).'" method="POST" style="display:inline;">'
-                        .csrf_field()
-                        .method_field('DELETE')
-                        .'<button type="button" class="btn btn-danger btn-sm mb-2" onclick="confirmDelete(\'delete-service-'.$row->id.'\')">
-                            <i class="fas fa-trash"></i>
-                        </button>'
-                    .'</form>';
+            $btn = '';
+            if (auth()->user()->can('service-edit')) {
+                $btn = '<a href ="'.route('service.edit', $row->slug).'" class="btn btn-primary btn-sm me-2 mb-2">
+                            <i class="fas fa-edit"></i>
+                        </a>';
+            }
+            if (auth()->user()->can('service-delete')) {
+                $btn .= '<form id="delete-service-'.$row->id.'" action="'.route('service.destroy', $row->slug).'" method="POST" style="display:inline;">'
+                            .csrf_field()
+                            .method_field('DELETE')
+                            .'<button type="button" class="btn btn-danger btn-sm mb-2" onclick="confirmDelete(\'delete-service-'.$row->id.'\')">
+                                <i class="fas fa-trash"></i>
+                            </button>'
+                        .'</form>';
+            }
 
             return $btn;
         })
@@ -49,12 +57,18 @@ class ServiceController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('service-create')) {
+            abort(403, 'Access Denied');
+        }
         $services = Service::get();
         return view('service.create', compact('services'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('service-create')) {
+            abort(403, 'Access Denied');
+        }
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -82,12 +96,18 @@ class ServiceController extends Controller
 
     public function edit($slug)
     {
+        if (!auth()->user()->can('service-edit')) {
+            abort(403, 'Access Denied');
+        }
         $services = Service::where('slug', $slug)->first();
         return view('service.edit', compact('services'));
     }
 
     public function update(Request $request, $slug)
     {
+        if (!auth()->user()->can('service-edit')) {
+            abort(403, 'Access Denied');
+        }
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -121,6 +141,9 @@ class ServiceController extends Controller
 
     public function destroy($slug)
     {
+        if (!auth()->user()->can('service-delete')) {
+            abort(403, 'Access Denied');
+        }
         $services = Service::where('slug', $slug)->first();
         $oldImage = $services->image;
         if($oldImage && file_exists(public_path($oldImage))) {

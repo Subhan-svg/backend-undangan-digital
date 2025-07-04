@@ -12,6 +12,9 @@ class AboutController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('about-list')) {
+            abort(403, 'Access Denied');
+        }
         $aboutcount = About::count();
         $about = About::first();
         return view('about.index', compact('aboutcount', 'about'));
@@ -52,6 +55,9 @@ class AboutController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('about-create')) {
+            abort(403, 'Access Denied');
+        }
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -75,7 +81,7 @@ class AboutController extends Controller
 
         $about->save();
 
-        return redirect()->route('about')->with('success', 'About Berhasil Di Tambahkan');
+        return redirect()->route('about')->with('success', 'About Successfully Added');
     }
 
     public function edit($slug)
@@ -86,6 +92,9 @@ class AboutController extends Controller
 
     public function update(Request $request, $slug)
     {
+        if (!auth()->user()->can('about-edit')) {
+            abort(403, 'Access Denied');
+        }
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -114,15 +123,18 @@ class AboutController extends Controller
         
         $about->save();
 
-        return redirect()->route('about')->with('success', 'About Berhasil di Update');
+        return redirect()->route('about')->with('success', 'About Successfully Updated');
     }
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('about-delete')) {
+            abort(403, 'Access Denied');
+        }
         $about = About::find($id);
         $about->delete();
         
-        return redirect()->route('about')->with('success', 'About Berhasil di Hapus');
+        return redirect()->route('about')->with('success', 'About Successfully Deleted');
     }
 
     // Helper untuk generate slug unik

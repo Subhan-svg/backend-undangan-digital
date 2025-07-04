@@ -18,7 +18,9 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <h4 class="card-title">Permission</h4>
-                        <a href="{{ route('permission.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add </a>
+                        @can('permission-create')
+                            <a href="{{ route('permission.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">

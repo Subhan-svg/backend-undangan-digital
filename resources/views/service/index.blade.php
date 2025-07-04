@@ -20,7 +20,9 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <h4 class="card-title">Service</h4>
-                        <a href="{{ route('service.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add </a>
+                        @can('service-create')
+                            <a href="{{ route('service.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">

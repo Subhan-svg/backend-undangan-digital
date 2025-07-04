@@ -48,7 +48,7 @@
 
         <div class="sidebar-heading">Management User</div>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('user') ? 'active' : '' }}" href="{{ route('user') }}">
+            <a class="nav-link {{ request()->is('user/*') ? 'active' : '' }}" href="{{ route('user') }}">
                 <i class="fas fa-users"></i> User
             </a>
         </li>
