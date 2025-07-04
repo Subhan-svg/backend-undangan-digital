@@ -22,23 +22,23 @@
 
         <div class="card-body">
             <form id="category-form"
-            action="{{ route('category.update', $category->slug) }}" 
-            method="POST" 
-            onsubmit="confirmSubmit('category-form', 'Update Category?', 'Make sure all category data is correct')">
-            @csrf
+                action="{{ route('category.update', $category->slug) }}" 
+                method="POST" 
+                onsubmit="confirmSubmit('category-form', 'Update Category?', 'Make sure all category data is correct')">
+                @csrf
             
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                       id="title" name="title" value="{{ old('title', $category['title']) }}">
-                @error('title')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                        id="title" name="title" value="{{ old('title', $category->title) }}">
+                    @error('title')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Update
-            </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update
+                </button>
             </form>
         </div>
     </div>

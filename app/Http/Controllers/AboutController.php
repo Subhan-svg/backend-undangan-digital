@@ -12,8 +12,9 @@ class AboutController extends Controller
 {
     public function index()
     {
-        $about = About::count();
-        return view('about.index', compact('about'));
+        $aboutcount = About::count();
+        $about = About::first();
+        return view('about.index', compact('aboutcount', 'about'));
     }
 
     public function listData()
@@ -51,39 +52,30 @@ class AboutController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'title' => 'required',
-                'description' => 'required',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            ],
-            [
-                'required' => ':attribute harus di isi!',
-            ],
-        );
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return back()->with('errors', $errors);
-        }
-
-        if ($request->image <> '') {
-        $image = $request->file('image');
-        $nameimage = 'Image-'.str_replace(' ','-', $request->get('title')).'-'.Str::random(4).'.'.$image->extension();
-        $tujuan = 'images/about/';
-        $image->move(public_path($tujuan), $nameimage);
-        $imagename = $tujuan.''.$nameimage;
-        }
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
         $about = new About();
         $about->title = $request->title;
-        $about->slug = strtolower(str_replace(' ', '-', $request->title));
+        $about->slug = $this->generateUniqueSlug($request->title);
         $about->description = $request->description;
-        $about->image = $imagename;
+
+        if ($request->image <> '') {
+            $image = $request->file('image');
+            $nameimage = 'Image-'.str_replace(' ','-', $request->get('title')).'-'.Str::random(4).'.'.$image->extension();
+            $tujuan = 'images/about/';
+            $image->move(public_path($tujuan), $nameimage);
+            $imagename = $tujuan.''.$nameimage;
+
+            $about->image = $imagename;
+        }
+
         $about->save();
 
-        return redirect()->route('about')->with('toast_success', 'About Berhasil Di Tambahkan');
+        return redirect()->route('about')->with('success', 'About Berhasil Di Tambahkan');
     }
 
     public function edit($slug)
@@ -94,21 +86,19 @@ class AboutController extends Controller
 
     public function update(Request $request, $slug)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'title' => 'required',
-                'description' => 'required',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            ]);
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return back()->with('errors', $errors);
-        }
-        
+        $about = About::where('slug', $slug)->first();
+        $about->title = $request->title;
+        $about->slug = $this->generateUniqueSlug($request->title, $about->id);
+        $about->description = $request->description;
+
         if ($request->hasFile('image')) {
-            $oldimage = About::get('image');
+            $oldimage = $about->image;
             if ($oldimage && file_exists(public_path($oldimage))) {
                 unlink(public_path($oldimage));
             }
@@ -118,26 +108,37 @@ class AboutController extends Controller
             $tujuan = 'images/about/';
             $image->move(public_path($tujuan), $nameimage);
             $imagename = $tujuan.''.$nameimage;
-        }  
-           
 
-
-        $about = About::where('slug', $slug)->first();
-        $about->title = $request->title;
-        $about->slug = strtolower(str_replace(' ', '-', $request->title));
-        $about->description = $request->description;
-        if ($request->image <> '') {
             $about->image = $imagename;
         }
+        
         $about->save();
 
-        return redirect()->route('about')->with('toast_success', 'About Berhasil di Update');
+        return redirect()->route('about')->with('success', 'About Berhasil di Update');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $about = About::find($id);
         $about->delete();
         
-        return redirect()->route('about')->with('toast_success', 'About Berhasil di Hapus');
+        return redirect()->route('about')->with('success', 'About Berhasil di Hapus');
+    }
+
+    // Helper untuk generate slug unik
+    private function generateUniqueSlug($title, $ignoreId = null)
+    {
+        $slug = strtolower(str_replace(' ', '-', $title));
+        $originalSlug = $slug;
+        $i = 1;
+        while (About::where('slug', $slug)
+            ->when($ignoreId, function($query) use ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
+            })
+            ->exists()) {
+            $slug = $originalSlug . '-' . $i;
+            $i++;
+        }
+        return $slug;
     }
 }

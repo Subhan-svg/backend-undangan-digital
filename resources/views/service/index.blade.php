@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Website Service</h1>
+        <h1>Service</h1>
     </div>
 
     @if (session('success'))
@@ -31,6 +31,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Title</th>
+                                    <th>Slug</th>
                                     <th>Description</th>
                                     <th>Image</th>
                                     <th>Action</th>
@@ -66,6 +67,10 @@
                     {
                         data: 'title',
                         name: 'title'
+                    },
+                    {
+                        data: 'slug',
+                        name: 'slug'
                     },
                     {
                         data: 'description',

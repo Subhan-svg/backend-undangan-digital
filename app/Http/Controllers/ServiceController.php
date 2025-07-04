@@ -21,19 +21,23 @@ class ServiceController extends Controller
         $datatables = DataTables::of($data)
         ->addIndexColumn()
         ->addColumn('image', function($row){
-            $image = '';
+            $image = '<span class="badge bg-danger">No Image</span>';
             if($row->image <> ''){
                 $image = '<img src="'.url($row->image).'" width="80">';
             }
             return $image;
         })
         ->addColumn('action', function($row){
-            $btn = '<a href ="'.route('service.edit', $row->slug).'" class="btn btn-primary btn-sm mr-2 mb-2">
+            $btn = '<a href ="'.route('service.edit', $row->slug).'" class="btn btn-primary btn-sm me-2 mb-2">
                         <i class="fas fa-edit"></i>
                     </a>';
-            $btn .= '<a href="'.route('service.destroy', $row->slug).'" class="btn btn-danger btn-sm mr-2 mb-2">
-                        <i class="fas fa-trash"></i>
-                    </a>';
+            $btn .= '<form id="delete-service-'.$row->id.'" action="'.route('service.destroy', $row->slug).'" method="POST" style="display:inline;">'
+                        .csrf_field()
+                        .method_field('DELETE')
+                        .'<button type="button" class="btn btn-danger btn-sm mb-2" onclick="confirmDelete(\'delete-service-'.$row->id.'\')">
+                            <i class="fas fa-trash"></i>
+                        </button>'
+                    .'</form>';
 
             return $btn;
         })
@@ -51,29 +55,26 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        $validate = Validator::make($request->all(),
-        [
+        $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'image' => 'mimes:jpg,jpeg,png',
+            'image' => 'mimes:jpg,jpeg,png,svg',
         ]);
-
-        if($validate->fails()){
-            return back()->withErrors($validate)->withInput();
-        }
-
-        if($request->image <> ''){
-            $image = $request->file('image');
-            $nameImage = 'Image-'.Str::random(5).'-'.$image->extension();
-            $image->move(public_path('images/services'), $nameImage);
-            $imageName = 'images/services/'.$nameImage;
-        }
 
         $services = new Service();
         $services->title = $request->title;
-        $services->slug = strtolower(str_replace(' ', '-', $request->title));
+        $services->slug = $this->generateUniqueSlug($request->title);
         $services->description = $request->description;
-        $services->image = $imageName;
+
+        if($request->image <> ''){
+            $image = $request->file('image');
+            $nameImage = 'Image-'.Str::random(5).'-Service.'.$image->extension();
+            $image->move(public_path('images/services'), $nameImage);
+            $imageName = 'images/services/'.$nameImage;
+
+            $services->image = $imageName;
+        }
+
         $services->save();
 
         return redirect()->route('service')->with('success', 'Service berhasil ditambahkan');
@@ -87,34 +88,32 @@ class ServiceController extends Controller
 
     public function update(Request $request, $slug)
     {
-        $validate = Validator::make($request->all(), 
-        [
+        $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'image' => 'mimes:jpg,jpeg,png'
+            'image' => 'mimes:jpg,jpeg,png,svg',
         ]);
 
-        if($validate->fails()){
-            return back()->withErrors($validate)->withInput();
-        }
+        $services = Service::where('slug', $slug)->first();
 
         if ($request->hasFile('image')){
-            $oldImage = Service::get('image');
+            $oldImage = $services->image;
             if($oldImage && file_exists(public_path($oldImage))) {
                 unlink(public_path($oldImage));
             }
 
             $image = $request->file('image');
-            $nameImage = 'Image-'.Str::random(5).'-'.$image->extension();
+            $nameImage = 'Image-'.Str::random(5).'-Service.'.$image->extension();
             $image->move(public_path('images/services/'), $nameImage);
             $imageName = 'images/services/'.$nameImage;
+
+            $services->image = $imageName;
         }
 
-        $services = Service::where('slug', $slug)->first();
+        
         $services->title = $request->title;
-        $services->slug = strtolower(str_replace(' ', '-', $request->title));
+        $services->slug = $this->generateUniqueSlug($request->title, $services->id);
         $services->description = $request->description;
-        $services->image = $imageName;
         $services->save();
 
         return redirect()->route('service')->with('success', 'Service berhasil diperbarui');
@@ -123,8 +122,29 @@ class ServiceController extends Controller
     public function destroy($slug)
     {
         $services = Service::where('slug', $slug)->first();
+        $oldImage = $services->image;
+        if($oldImage && file_exists(public_path($oldImage))) {
+            unlink(public_path($oldImage));
+        }
         $services->delete();
 
         return redirect()->back()->with('success', 'Service berhasil dihapus');
+    }
+
+    // Helper untuk generate slug unik
+    private function generateUniqueSlug($title, $ignoreId = null)
+    {
+        $slug = strtolower(str_replace(' ', '-', $title));
+        $originalSlug = $slug;
+        $i = 1;
+        while (Service::where('slug', $slug)
+            ->when($ignoreId, function($query) use ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
+            })
+            ->exists()) {
+            $slug = $originalSlug . '-' . $i;
+            $i++;
+        }
+        return $slug;
     }
 }

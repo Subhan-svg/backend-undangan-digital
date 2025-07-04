@@ -46,6 +46,26 @@
             </a>
         </li>
 
+        <div class="sidebar-heading">Management User</div>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('user') ? 'active' : '' }}" href="{{ route('user') }}">
+                <i class="fas fa-users"></i> User
+            </a>
+        </li>
+
+        <!-- Management Access -->
+        <div class="sidebar-heading">Management Access</div>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('role') ? 'active' : '' }}" href="{{ route('role') }}">
+                <i class="fas fa-cog"></i> Roles
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('permission') ? 'active' : '' }}" href="{{ route('permission') }}">
+                <i class="fas fa-cog"></i> Permission
+            </a>
+        </li>
+
         <!-- Settings -->
         <div class="sidebar-heading">Settings</div>
         <li class="nav-item">

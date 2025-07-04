@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Website Service</h1>
+        <h1>Service</h1>
     </div>
 
     @if (session('success'))
@@ -31,7 +31,7 @@
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
-                        name="title">
+                        name="title" value="{{ old('title') }}">
                     @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -40,7 +40,7 @@
                 <div class="mb-3">
                     <label for="description" class="form-label">Deskripsi Service Website</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" id="description"
-                        name="description" rows="3"></textarea>
+                        name="description" rows="3">{{ old('description') }}</textarea>
                     <small class="text-muted">Deskripsi untuk layanan service website anda</small>
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>

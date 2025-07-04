@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AuthController extends Controller
 {
@@ -45,26 +47,25 @@ class AuthController extends Controller
 
     public function profile()
     {
-        return view('profile.index');
+        $user = auth()->user();
+        $roles = Role::all();
+        $permissions = Permission::all();
+        $userRoles = $user->roles->pluck('name')->toArray();
+        $userPermissions = $user->permissions->pluck('name')->toArray();
+        return view('profile.index', compact('user', 'roles', 'permissions', 'userRoles', 'userPermissions'));
     }
 
     public function updateProfile(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('profile')->with('error', $validator->errors()->all());
+        $user = auth()->user();
+        $user->update($request->only(['name', 'email']));
+        if ($request->has('roles')) {
+            $user->syncRoles($request->roles);
         }
-
-        $user = Auth::user();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
-
-        return redirect()->route('profile')->with('success', 'Profile berhasil diubah');
+        if ($request->has('permissions')) {
+            $user->syncPermissions($request->permissions);
+        }
+        return redirect()->route('profile')->with('success', 'Profile updated successfully');
     }
 
     public function changePassword(Request $request)
